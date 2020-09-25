@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> Email Script</title>
+</head>
+
+<body>
+    <form method="post" id="contact-form">
+
+        <label>Name.<label>
+                <input type="text" name="name" id="name">
+                <label>Email</label>
+        <input name="Email" id="email">
+        <label> Mobile</label>
+        <input type='number' name="mobile" id="mobile">
+
+        <label>BHK<label>
+                        <select class="form-control" id="bhk">
+                            <option value="3bhk">3bhk</option>
+                            <option value="4bhk">4bhk</option>
+
+                        </select>
+                        <input type="button" name="submit" value="Send Email" onclick="sendEmail()" />
+    </form>
+</body>
+
+<script src="https://smtpjs.com/v3/smtp.js">
+</script>
+
+<script type="text/javascript">
+    let validateEmail = email => {
+        var mailFormat = /^[a-zA-Z0-9.!#$%&'+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)$/;
+        if (email.match(mailFormat)) return true;
+        else return false;
+    };
+
+    function sendEmail() {
+        let name = document.getElementById('name').value.trim();
+        let mobile = document.getElementById('mobile').value.trim();
+        if (mobile.toString().length != 10) {
+            alert('Invalid Mobile');
+            return false;
+        }
+        let email = document.getElementById('email').value.trim();
+        let bhk = document.getElementById('bhk').value.trim();
+        if (!name) {
+            alert('Name required');
+            return false;
+        }
+        if (!mobile) {
+            alert('Mobile require');
+            return false;
+        }
+        if (!bhk) {
+            alert('BHK required');
+            return false;
+        }
+        if (!email) {
+            alert('Email Required');
+            return false;
+        }
+        if (!validateEmail(email)) {
+            alert('Invalid Email');
+            return false;
+        }
+
+        let body = `<table class='table'>  
+                <tbody>
+                  <tr>
+                    <th>Email</th>
+                    <th>Mobile</th>
+                    <th>Email</th>
+                    <th>BHK</th>
+                  </tr>
+                  <tr>
+                    <td>${name}</td>
+                    <td>${mobile}</td>
+                    <td>${email}</td>
+                    <td>${bhk}</td>
+                  </tr>
+                </tbody>
+              </table>`;
+
+        Email.send({
+            Host: "smtp.gmail.com",
+            Username: "m2kindia08@gmail.com",
+            Password: "xmytrrzzwztldnpr",
+            To: 'naresh.ahirwar.tma@gmail.com',
+            From: "naresh.ahirwar.tma@gmail.com",
+            Subject: `Enquiry - from ${name}, ${mobile}`,
+            Body: body,
+        })
+            .then(function (message) {
+                alert("mail sent successfully");
+            });
+        return true;
+    }
+
+</script>
